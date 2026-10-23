@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Scansupp compares UK prices for protein, creatine, electrolytes and supplements across high street shops, online stores, Amazon and brand websites.">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Scansupp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: quiet editorial site, hairline rules and generous space; hash-routed views; price figures set in mono */
+:root{
+  --bg:#fcefc4; --surface:#fffaeb; --ink:#1f1a0e; --muted:#6e6345; --line:#efdfa6; --line-strong:#dcc47c;
+  --accent:#1f4d3f; --accent-soft:#f3ecd2; --brass:#8a6118;
+  --best:#1d6a49; --best-soft:#e9f1d6; --warn:#94511a; --warn-soft:#fbe6c9;
+  --display:"Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17130a; --surface:#201a0e; --ink:#f3ecd8; --muted:#b0a27e; --line:#33291a; --line-strong:#4a3c22;
+  --accent:#8cc4ad; --accent-soft:#1a2b24; --brass:#e2b65c;
+  --best:#7fd0ab; --best-soft:#15291f; --warn:#e2a668; --warn-soft:#2c2014; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17130a; --surface:#201a0e; --ink:#f3ecd8; --muted:#b0a27e; --line:#33291a; --line-strong:#4a3c22;
+  --accent:#8cc4ad; --accent-soft:#1a2b24; --brass:#e2b65c;
+  --best:#7fd0ab; --best-soft:#15291f; --warn:#e2a668; --warn-soft:#2c2014; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.7 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+.wrap{max-width:1140px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.narrow{max-width:740px}
+button:focus-visible,select:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:1.5px solid var(--accent);outline-offset:3px}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+header.top .wrap{display:flex;align-items:center;gap:24px;padding-block:18px;flex-wrap:wrap}
+.logo{font:400 28px/1 var(--display);letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+.logo b{font-weight:400;font-style:italic;color:var(--accent)}
+nav.main{display:flex;gap:6px 28px;flex-wrap:wrap;margin-left:auto;font:500 12px var(--body);letter-spacing:.12em;text-transform:uppercase}
+nav.main a{color:var(--muted);text-decoration:none;padding:4px 0;border-bottom:1px solid transparent;transition:color .2s}
+nav.main a:hover{color:var(--ink)}
+nav.main a.on{color:var(--ink);border-bottom-color:var(--brass)}
+
+/* type */
+h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:-.01em;text-wrap:balance}
+.eyebrow{font:600 11px var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin:0 0 14px}
+.crumbs{font-size:13px;color:var(--muted);padding-block:32px 0;letter-spacing:.02em}
+.crumbs a{color:var(--muted);text-decoration:none}
+.crumbs a:hover{color:var(--ink)}
+.pagehead{padding-block:28px 40px}
+.pagehead h1{font-size:clamp(40px,6vw,64px);line-height:1;margin:0 0 16px}
+.pagehead p{color:var(--muted);max-width:60ch;margin:0;font-size:18px}
+.prose{max-width:64ch}
+.prose h2{font-size:32px;line-height:1.1;margin:48px 0 12px}
+.prose h3{font-size:24px;margin:30px 0 8px}
+.prose ul{padding-left:20px}
+.prose li{margin-bottom:6px}
+.note{background:transparent;color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:500;margin:0}
+.section{padding-block:64px}
+.section h2.sh{font-size:clamp(32px,4vw,44px);line-height:1.05;margin:0 0 10px}
+.section .sub{color:var(--muted);margin:0 0 32px}
+.btn{display:inline-block;border:1px solid var(--accent);background:var(--accent);color:var(--bg);border-radius:2px;padding:13px 24px;font:600 12px var(--body);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.88}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+
+/* hero */
+.hero{padding-block:88px 72px;display:grid;grid-template-columns:1.3fr 1fr;gap:72px;align-items:center}
+.hero h1{font:400 clamp(48px,7.4vw,92px)/.95 var(--display);letter-spacing:-.02em;margin:0 0 28px}
+.hero h1 em{color:var(--accent)}
+.hero p{color:var(--muted);max-width:46ch;margin:0 0 36px;font-size:18px}
+.search{display:flex;align-items:center;border-bottom:1px solid var(--ink);max-width:520px;gap:12px}
+.search input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:400 18px var(--body);padding:14px 0}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{outline:none}
+.search:focus-within{border-color:var(--accent)}
+.search button{border:0;background:transparent;color:var(--accent);font:600 12px var(--body);letter-spacing:.14em;text-transform:uppercase;padding:10px 0;cursor:pointer}
+.receipt{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:32px;font:400 14px var(--mono)}
+.receipt h3{font:600 11px var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin:0 0 20px}
+.receipt .row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.receipt .row:last-of-type span:last-child{color:var(--ink)}
+.receipt .tot{margin-top:18px;display:flex;justify-content:space-between;align-items:baseline;font:400 15px var(--body);color:var(--muted)}
+.receipt .tot span:last-child{font:400 34px var(--display);color:var(--best)}
+
+/* categories */
+.cats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-strong)}
+.tile{padding:28px 24px 28px 0;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;border-bottom:1px solid var(--line)}
+.tile + .tile{padding-left:24px;border-left:1px solid var(--line)}
+.tile strong{font:400 32px/1.05 var(--display);transition:color .2s}
+.tile:hover strong{color:var(--accent)}
+.tile span{color:var(--muted);font-size:14px}
+.tile em{font:400 13px var(--mono);font-style:normal;color:var(--best);margin-top:auto;padding-top:20px}
+
+/* cards */
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;color:var(--muted);font-size:13px;letter-spacing:.02em}
+.toolbar select{font:500 13px var(--body);padding:8px 12px;border-radius:2px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:28px;display:flex;flex-direction:column;gap:18px;min-width:0;text-decoration:none;color:var(--ink);transition:box-shadow .25s,border-color .25s}
+.card:hover{border-color:var(--line-strong);box-shadow:0 18px 40px -24px color-mix(in srgb,var(--ink) 35%,transparent)}
+.card .tag{font:600 10px var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
+.card h3{font:400 26px/1.1 var(--display);margin:8px 0 4px}
+.card .spec{color:var(--muted);font-size:14px}
+.price{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:18px;border-top:1px solid var(--line)}
+.big{font:400 40px/1 var(--display);letter-spacing:-.01em}
+.per{font:400 12px var(--mono);color:var(--muted);margin-top:8px}
+.save{color:var(--best);font:500 12px var(--mono);white-space:nowrap;padding-bottom:4px}
+.bar{height:2px;background:var(--line);position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--best)}
+.from{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.from b{color:var(--ink);font-weight:600}
+
+/* product page */
+.prod{display:grid;grid-template-columns:320px 1fr;gap:48px;align-items:start;padding-bottom:56px}
+.summary{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:32px;display:flex;flex-direction:column;gap:16px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 96px)}
+.summary .big{font-size:56px}
+.summary dl{display:grid;grid-template-columns:auto 1fr;gap:0;margin:8px 0 4px;font-size:13px;border-top:1px solid var(--line)}
+.summary dt,.summary dd{padding:10px 0;border-bottom:1px solid var(--line)}
+.summary dt{color:var(--muted)}
+.summary dd{margin:0;text-align:right;font-family:var(--mono)}
+.tablebox{background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:860px}
+th{font:600 10px var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:left;padding:18px 18px 14px;border-bottom:1px solid var(--line-strong)}
+td{padding:18px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums;vertical-align:top}
+tbody tr:first-child td{border-top:0}
+td.n,th.n{text-align:right;font-family:var(--mono)}
+tr.lead td{background:var(--best-soft)}
+tr.lead td:first-child{font-weight:600;box-shadow:inset 2px 0 0 var(--best)}
+.pill{display:inline-block;font:600 9px var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--best);border:1px solid currentColor;border-radius:2px;padding:2px 6px;margin-left:8px;vertical-align:2px}
+.visit{color:var(--accent);font:600 11px var(--body);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;white-space:nowrap}
+.small{font-size:12px;color:var(--muted)}
+.prod .small{line-height:1.6}
+
+/* guides */
+.guides{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0 40px;border-top:1px solid var(--line-strong)}
+.guide{padding:28px 0;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)}
+.guide .eyebrow{margin:0}
+.guide h3{font-size:28px;line-height:1.1;margin:0;transition:color .2s}
+.guide:hover h3{color:var(--accent)}
+.guide p{margin:0;color:var(--muted);font-size:15px}
+.guide span{font:400 12px var(--mono);color:var(--muted);margin-top:auto;padding-top:8px}
+
+/* how it works */
+.how{border-block:1px solid var(--line);background:var(--surface)}
+.how .wrap{padding-block:72px;display:grid;grid-template-columns:repeat(3,1fr);gap:56px}
+.how h3{font-size:30px;margin:0 0 10px;line-height:1.1}
+.how p{margin:0;color:var(--muted);max-width:36ch}
+.how .num{font:400 italic 22px var(--display);color:var(--brass);margin-bottom:14px}
+
+/* forms */
+form.contact{display:grid;gap:20px;max-width:540px;margin-top:28px}
+form.contact label{font:600 11px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:grid;gap:8px}
+form.contact input,form.contact textarea,form.contact select{font:400 16px var(--body);letter-spacing:0;text-transform:none;padding:12px 14px;border-radius:2px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+form.contact textarea{min-height:140px;resize:vertical}
+.ok{border:1px solid var(--best);color:var(--best);border-radius:2px;padding:12px 16px;font-size:14px}
+
+.ad{font-size:12px;color:var(--muted);padding:0 0 0 12px;border-left:1px solid var(--brass);margin:0 0 14px;line-height:1.6}
+.ad b{color:var(--ink);font-weight:600}
+.cond{font:500 11px var(--body);color:var(--warn);margin-top:4px;letter-spacing:.02em}
+.stock{font:500 12px var(--body);white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
+.stock::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.stock.s2{color:var(--best)}
+.stock.s1{color:var(--warn)}
+.stock.s0{color:var(--muted)}
+tr.oos td{color:var(--muted)}
+.pending{font:500 11px var(--body);color:var(--muted);letter-spacing:.04em;white-space:nowrap}
+.btn[aria-disabled]{cursor:default;text-align:center;color:var(--muted);background:transparent;border:1px dashed var(--line-strong)}
+
+/* deals */
+.topdeals{margin-bottom:48px}
+.topdeals .sh{font-size:clamp(30px,4vw,40px);margin:0 0 16px;line-height:1.05}
+.deals{background:var(--surface);border:1px solid var(--line);border-radius:4px}
+.deals ol{list-style:none;margin:0;padding:0}
+.deals li{display:grid;grid-template-columns:40px minmax(0,1fr) auto auto;gap:24px;align-items:center;padding:22px 28px;border-top:1px solid var(--line)}
+.deals li:first-child{border-top:0}
+.rank{font:400 italic 26px var(--display);color:var(--brass)}
+.d-name{font:400 24px/1.15 var(--display);color:var(--ink);text-decoration:none}
+.d-name:hover{color:var(--accent)}
+.d-where{font-size:13px;color:var(--muted);margin-top:4px}
+.d-where b{color:var(--ink);font-weight:600}
+.cond-in{color:var(--warn)}
+.d-figs{display:flex;gap:28px;margin:0}
+.d-figs div{display:grid;gap:2px;text-align:right}
+.d-figs dt{font:600 10px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.d-figs dd{margin:0;font:400 14px var(--mono);white-space:nowrap}
+.d-tot{color:var(--best);font-weight:500}
+.d-tot small{color:var(--muted);font-size:11px}
+.deal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.deals.compact{display:flex;flex-direction:column}
+.deals-head{display:flex;justify-content:space-between;align-items:baseline;padding:22px 24px 14px;border-bottom:1px solid var(--line-strong)}
+.deals-head a{font:400 30px var(--display);color:var(--ink);text-decoration:none}
+.deals-head a:hover{color:var(--accent)}
+.deals-head span{font:600 10px var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
+.deals.compact li{grid-template-columns:28px minmax(0,1fr);gap:4px 14px;padding:18px 24px;align-items:start}
+.deals.compact .rank{font-size:20px;line-height:1.3}
+.deals.compact .d-name{font-size:20px}
+.deals.compact .d-figs,.deals.compact .d-buy{grid-column:2}
+.deals.compact .d-figs{justify-content:flex-start;gap:24px;margin-top:8px}
+.deals.compact .d-figs div{text-align:left}
+.deals.compact .d-buy{margin-top:6px}
+/* card mini table */
+table.mini{min-width:0;font-size:13px;margin:0}
+table.mini th{padding:0 0 8px;font-size:9px;border-bottom:1px solid var(--line)}
+table.mini td{padding:8px 0;border-top:1px solid var(--line);vertical-align:middle}
+table.mini tbody tr:first-child td{border-top:0}
+table.mini tr.first td{color:var(--best);font-weight:600}
+table.mini td.n{font-size:12px}
+@media (max-width:900px){.deal-grid{grid-template-columns:1fr}.deals li{grid-template-columns:32px minmax(0,1fr);gap:6px 14px;padding:20px}.deals li .d-figs,.deals li .d-buy{grid-column:2}.d-figs{justify-content:flex-start}.d-figs div{text-align:left}}
+@media (max-width:480px){.d-figs{gap:18px;flex-wrap:wrap}}
+.rank-t{min-width:1160px}
+.off-cell{border-left:1px solid var(--line)}
+.off-badge{display:inline-block;font:600 9px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--brass);border:1px solid currentColor;border-radius:2px;padding:1px 5px;margin-left:8px;vertical-align:2px}
+.amz-cell{border-left:1px solid var(--line)}
+tr.amz td{background:color-mix(in srgb,var(--brass) 6%,transparent)}
+.rank-t td{vertical-align:middle}
+.rk{font:400 italic 26px var(--display);color:var(--brass);width:48px}
+.rank-t tr.lead .rk{color:var(--best)}
+.r-brand{font:400 22px/1.1 var(--display);color:var(--ink);text-decoration:none}
+.r-brand:hover{color:var(--accent)}
+.p100{font-weight:500;color:var(--ink)}
+.rank-t tr.lead .p100{color:var(--best)}
+.cheaper{color:var(--best);font-weight:500}
+.cheaper small{color:var(--muted);font-weight:400}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.chip{font:600 11px var(--body);letter-spacing:.1em;text-transform:uppercase;padding:9px 14px;border-radius:2px;border:1px solid var(--line-strong);background:transparent;color:var(--muted);cursor:pointer}
+.chip:hover{color:var(--ink)}
+.chips+.chips{margin-top:-10px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.with-thumb{display:flex;gap:16px;align-items:center;min-width:0}
+.with-thumb>div{min-width:0}
+.thumb{flex:none;display:block;border-radius:8px;object-fit:contain;background:var(--bg)}
+.card .with-thumb{align-items:flex-start}
+.big-thumb{gap:28px}
+.big-thumb .thumb{border:1px solid var(--line)}
+@media (max-width:480px){.big-thumb{flex-direction:column;align-items:flex-start}}
+footer{border-top:1px solid var(--line);margin-top:40px;background:var(--surface)}
+footer .wrap{padding-block:56px 40px;display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:40px;font-size:14px;color:var(--muted)}
+footer p{max-width:34ch}
+footer h4{font:600 10px var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin:6px 0 16px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--ink)}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:48px;padding-block:56px 48px}
+  .prod{grid-template-columns:1fr}.summary{position:static}
+  .cats{grid-template-columns:repeat(2,1fr)}
+  .tile:nth-child(odd){padding-left:0;border-left:0}
+  .how .wrap{grid-template-columns:1fr;gap:40px;padding-block:56px}
+  footer .wrap{grid-template-columns:1fr 1fr}
+}
+@media (max-width:480px){
+  .cats{grid-template-columns:1fr}.tile,.tile + .tile{padding-left:0;border-left:0}
+  .grid{grid-template-columns:1fr}.card{padding:22px}
+  footer .wrap{grid-template-columns:1fr}
+  .section{padding-block:48px}
+}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .6s ease}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="#home">Scan<b>supp</b></a>
+  <nav class="main" aria-label="Main">
+    <a href="#protein">Protein</a><a href="#creatine">Creatine</a><a href="#electrolytes">Electrolytes</a><a href="#supplements">Supplements</a><a href="#guides">Buying guides</a>
+  </nav>
+</div></header>
+
+<div id="view"></div>
+
+<footer><div class="wrap">
+  <div><a class="logo" href="#home">Scan<b>supp</b></a><p>UK supplement price comparison, ranked by cost per serving. Prices include standard delivery.</p></div>
+  <div><h4>Compare</h4><ul><li><a href="#protein">Protein</a></li><li><a href="#creatine">Creatine</a></li><li><a href="#electrolytes">Electrolytes</a></li><li><a href="#supplements">Supplements</a></li></ul></div>
+  <div><h4>Learn</h4><ul><li><a href="#guides">Buying guides</a></li><li><a href="#about">About us</a></li><li><a href="#contact">Contact</a></li></ul></div>
+  <div><h4>Legal</h4><ul><li><a href="#disclosure">Affiliate disclosure</a></li><li><a href="#privacy">Privacy policy</a></li></ul><p>As an Amazon Associate we earn from qualifying purchases.</p><p>© 2026 Scansupp</p></div>
+</div></footer>
+
+<script>
+const CATS={
+  protein:{t:"Protein",d:"Twenty high street whey brands ranked every day by best delivered price per 100g, with where to buy each one."},
+  creatine:{t:"Creatine",d:"Twenty high street creatine powders ranked every day by best delivered price per 100g."},
+  electrolytes:{t:"Electrolytes",d:"Twenty high street hydration brands ranked every day by best delivered price per serving."},
+  supplements:{t:"Supplements",d:"Twenty high street vitamins, omega-3, magnesium and pre-workouts ranked by best delivered price per daily dose."}
+};
+/* ===== PRODUCT DATA (manually maintained) =====
+   One product = one brand, size and flavour. Only add offers for that exact pack.
+   Each offer: [retailer, price £, delivery £ (null = unknown), stock, last updated, tracked link, condition note]
+   stock: 2 = In stock, 1 = Low stock, 0 = Out of stock
+   tracked link: paste the affiliate deep link once the retailer approves you; leave "" until then.
+   condition note: flag subscription prices, voucher codes or first-order discounts.
+   ALL VALUES BELOW ARE SAMPLES FOR LAYOUT. Retailer names are placeholders. */
+const D="22 Oct 2026";
+const P=[
+ {id:"myprotein-impact",c:"protein",brand:"Myprotein",n:"Impact Whey Protein",pack:"1kg",g:1000,flav:"Chocolate Smooth",serv:40,pro:21,o:[["Sports Direct",26.00,4.99,2,D+", 08:10","",""],["Home Bargains",25.50,null,2,D+", 07:45","","Loyalty card price"],["Boots",26.00,3.75,2,D+", 09:02","","Loyalty card price"],["Discount Supplements",23.50,0,2,D+", 09:02","",""],["Ocado",22.79,null,1,D+", 07:15","",""]]},
+ {id:"bulk-pure-whey",c:"protein",brand:"Bulk",n:"Pure Whey Protein",pack:"1kg",g:1000,flav:"Chocolate",serv:33,pro:23,o:[["Sainsbury's",21.99,null,2,D+", 08:40","","3 for 2 offer"],["Sports Direct",23.99,4.99,2,D+", 07:15","","3 for 2 offer"],["Home Bargains",22.50,null,2,D+", 06:30","",""],["Predator Nutrition",23.00,3.95,2,D+", 06:30","","First order only, code WELCOME"],["Ocado",26.99,null,2,D+", 09:02","",""]]},
+ {id:"on-gold-standard",c:"protein",brand:"Optimum Nutrition",n:"Gold Standard 100% Whey",pack:"900g",g:900,flav:"Double Rich Chocolate",serv:30,pro:24,o:[["Boots",35.00,3.75,2,D+", 08:40","","Loyalty card price"],["Holland & Barrett",37.79,3.99,2,D+", 09:02","","3 for 2 offer"],["Asda",38.50,null,2,D+", 09:02","",""],["Predator Nutrition",38.49,3.95,2,D+", 08:40","",""],["Supplement Hub",38.49,3.49,2,D+", 08:10","","Free delivery over £30 (not met)"]]},
+ {id:"phd-diet-whey",c:"protein",brand:"PhD",n:"Diet Whey",pack:"1kg",g:1000,flav:"Belgian Chocolate",serv:40,pro:17,o:[["Boots",33.99,3.75,2,D+", 09:02","",""],["Home Bargains",31.99,null,2,D+", 09:02","","3 for 2 offer"],["Asda",29.50,null,2,D+", 07:15","","Loyalty card price"],["Ocado",28.79,null,2,D+", 07:45","",""],["Predator Nutrition",34.50,3.95,2,D+", 08:40","","First order only, code WELCOME"]]},
+ {id:"grenade-whey",c:"protein",brand:"Grenade",n:"Whey Protein",pack:"480g",g:480,flav:"Chocolate Chip Salted Caramel",serv:16,pro:22,o:[["Home Bargains",22.49,null,2,D+", 07:15","",""],["Asda",23.00,null,2,D+", 08:10","","Loyalty card price"],["Sainsbury's",20.50,null,2,D+", 08:40","",""],["Ocado",21.50,null,1,D+", 06:30","",""],["Discount Supplements",19.00,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"]]},
+ {id:"usn-blue-lab",c:"protein",brand:"USN",n:"Blue Lab 100% Whey",pack:"908g",g:908,flav:"Chocolate",serv:26,pro:26,o:[["Tesco",26.00,null,2,D+", 06:30","",""],["Asda",29.79,null,2,D+", 08:10","",""],["Holland & Barrett",25.00,3.99,2,D+", 08:10","",""],["Predator Nutrition",25.00,3.95,1,D+", 08:40","","First order only, code WELCOME"],["Supplement Hub",25.00,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"]]},
+ {id:"applied-iso-xp",c:"protein",brand:"Applied Nutrition",n:"ISO-XP Whey Isolate",pack:"1kg",g:1000,flav:"Chocolate",serv:40,pro:22,o:[["Tesco",37.79,null,2,D+", 09:02","",""],["Home Bargains",38.00,null,2,D+", 08:10","",""],["Sainsbury's",35.79,null,2,D+", 08:10","",""],["Ocado",35.49,null,2,D+", 09:02","","First order only, code WELCOME"],["Supplement Hub",42.79,3.49,2,D+", 08:10","","Free delivery over £30 (not met)"]]},
+ {id:"muscletech-nitro-tech",c:"protein",brand:"MuscleTech",n:"Nitro-Tech Whey",pack:"908g",g:908,flav:"Milk Chocolate",serv:22,pro:30,o:[["Sports Direct",36.79,4.99,2,D+", 08:10","","Loyalty card price"],["Tesco",41.79,null,2,D+", 07:45","",""],["Home Bargains",40.99,null,2,D+", 08:10","","3 for 2 offer"],["Discount Supplements",33.99,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"],["Predator Nutrition",40.79,3.95,0,D+", 06:30","",""]]},
+ {id:"reflex-instant-whey",c:"protein",brand:"Reflex",n:"Instant Whey PRO",pack:"900g",g:900,flav:"Chocolate",serv:30,pro:23,o:[["Holland & Barrett",29.99,3.99,2,D+", 08:40","","Loyalty card price"],["Tesco",30.50,null,2,D+", 08:10","","Loyalty card price"],["Boots",26.49,3.75,1,D+", 06:30","","Loyalty card price"],["Ocado",28.50,null,2,D+", 09:02","",""],["Predator Nutrition",33.50,3.95,1,D+", 08:40","",""]]},
+ {id:"dymatize-iso100",c:"protein",brand:"Dymatize",n:"ISO100 Hydrolyzed",pack:"900g",g:900,flav:"Gourmet Chocolate",serv:30,pro:25,o:[["Holland & Barrett",45.50,3.99,2,D+", 07:15","",""],["Sainsbury's",45.49,null,2,D+", 06:30","",""],["Sports Direct",43.50,4.99,1,D+", 08:10","",""],["Ocado",46.99,null,2,D+", 08:10","",""],["Predator Nutrition",44.99,3.95,2,D+", 08:40","","First order only, code WELCOME"]]},
+ {id:"kinetica-whey",c:"protein",brand:"Kinetica",n:"100% Whey Protein",pack:"1kg",g:1000,flav:"Chocolate",serv:33,pro:23,o:[["Sainsbury's",21.50,null,0,D+", 07:45","",""],["Home Bargains",24.99,null,2,D+", 07:15","","Loyalty card price"],["Tesco",20.50,null,2,D+", 08:40","","Loyalty card price"],["Supplement Hub",23.50,0,2,D+", 08:40","","Subscribe & save price"],["Discount Supplements",26.79,0,2,D+", 08:40","",""]]},
+ {id:"mutant-whey",c:"protein",brand:"Mutant",n:"Whey",pack:"908g",g:908,flav:"Triple Chocolate",serv:26,pro:22,o:[["Sports Direct",27.49,4.99,2,D+", 08:10","",""],["Sainsbury's",32.79,null,2,D+", 06:30","","Loyalty card price"],["Asda",27.49,null,0,D+", 06:30","","Loyalty card price"],["Discount Supplements",31.99,0,2,D+", 08:40","",""],["Supplement Hub",30.99,0,1,D+", 07:45","",""]]},
+ {id:"tpw-whey-80",c:"protein",brand:"The Protein Works",n:"Whey Protein 80",pack:"1kg",g:1000,flav:"Chocolate Silk",serv:40,pro:20,o:[["Sainsbury's",21.99,null,2,D+", 09:02","",""],["Sports Direct",24.99,4.99,2,D+", 09:02","",""],["Boots",25.50,3.75,1,D+", 07:15","",""],["Predator Nutrition",26.79,3.95,2,D+", 08:40","",""],["Supplement Hub",24.00,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"]]},
+ {id:"per4m-whey",c:"protein",brand:"PER4M",n:"Whey Protein",pack:"900g",g:900,flav:"Chocolate Fudge Brownie",serv:30,pro:24,o:[["Sports Direct",30.99,4.99,2,D+", 09:02","",""],["Home Bargains",33.50,null,2,D+", 09:02","",""],["Boots",36.49,3.75,2,D+", 07:45","",""],["Discount Supplements",29.49,3.49,2,D+", 09:02","","Free delivery over £30 (not met)"],["Supplement Hub",35.79,0,2,D+", 08:10","",""]]},
+ {id:"warrior-whey",c:"protein",brand:"Warrior",n:"Whey Protein",pack:"1kg",g:1000,flav:"Chocolate",serv:33,pro:23,o:[["Boots",18.49,3.75,2,D+", 07:15","",""],["Sports Direct",19.99,4.99,2,D+", 07:45","",""],["Asda",22.79,null,1,D+", 09:02","",""],["Discount Supplements",22.79,3.49,1,D+", 08:10","","Free delivery over £30 (not met)"],["Ocado",18.50,null,2,D+", 08:40","",""]]},
+ {id:"efectiv-whey",c:"protein",brand:"Efectiv Nutrition",n:"Whey Protein",pack:"908g",g:908,flav:"Chocolate",serv:30,pro:23,o:[["Sainsbury's",23.50,null,2,D+", 06:30","",""],["Home Bargains",28.79,null,2,D+", 08:40","","Loyalty card price"],["Boots",25.99,3.75,1,D+", 08:10","",""],["Ocado",30.99,null,2,D+", 07:15","",""],["Predator Nutrition",24.99,3.95,2,D+", 08:10","",""]]},
+ {id:"bsn-syntha-6",c:"protein",brand:"BSN",n:"Syntha-6",pack:"1.32kg",g:1320,flav:"Chocolate Milkshake",serv:28,pro:22,o:[["Holland & Barrett",46.50,3.99,2,D+", 08:40","","Loyalty card price"],["Home Bargains",45.99,null,2,D+", 08:10","",""],["Boots",39.00,3.75,2,D+", 09:02","","Loyalty card price"],["Predator Nutrition",36.00,3.95,2,D+", 09:02","",""],["Ocado",36.50,null,1,D+", 07:15","",""]]},
+ {id:"rule1-whey",c:"protein",brand:"Rule 1",n:"R1 Whey Blend",pack:"908g",g:908,flav:"Chocolate Fudge",serv:28,pro:24,o:[["Home Bargains",32.79,null,2,D+", 09:02","",""],["Asda",38.99,null,2,D+", 07:45","","Loyalty card price"],["Sports Direct",31.79,4.99,1,D+", 09:02","","Loyalty card price"],["Ocado",32.50,null,2,D+", 07:15","",""],["Predator Nutrition",35.79,3.95,2,D+", 07:15","",""]]},
+ {id:"ghost-whey",c:"protein",brand:"Ghost",n:"Whey Protein",pack:"924g",g:924,flav:"Chips Ahoy",serv:26,pro:25,o:[["Holland & Barrett",47.79,3.99,2,D+", 07:45","","Loyalty card price"],["Tesco",52.00,null,0,D+", 08:10","",""],["Asda",47.79,null,2,D+", 07:45","",""],["Supplement Hub",50.49,0,2,D+", 07:45","",""],["Ocado",42.50,null,2,D+", 08:10","",""]]},
+ {id:"hb-whey",c:"protein",brand:"Holland & Barrett",n:"Whey Protein",pack:"908g",g:908,flav:"Chocolate",serv:30,pro:22,o:[["Sainsbury's",30.00,null,2,D+", 06:30","",""],["Tesco",28.99,null,2,D+", 09:02","",""],["Home Bargains",30.99,null,2,D+", 07:45","",""],["Predator Nutrition",30.79,3.95,1,D+", 06:30","",""],["Ocado",28.99,null,2,D+", 09:02","",""]]},
+ {id:"myprotein-creatine",c:"creatine",brand:"Myprotein",n:"Creatine Monohydrate",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Tesco",22.79,null,2,D+", 07:15","","Loyalty card price"],["Sports Direct",23.99,4.99,1,D+", 06:30","","Loyalty card price"],["Holland & Barrett",22.00,3.99,1,D+", 09:02","",""],["Supplement Hub",20.49,0,1,D+", 08:40","",""],["Predator Nutrition",19.00,3.95,2,D+", 09:02","",""]]},
+ {id:"bulk-creatine",c:"creatine",brand:"Bulk",n:"Pure Creatine Monohydrate",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Sports Direct",16.00,4.99,2,D+", 07:15","",""],["Holland & Barrett",15.00,3.99,2,D+", 09:02","",""],["Home Bargains",17.50,null,2,D+", 07:45","",""],["Predator Nutrition",15.00,3.95,2,D+", 07:45","",""],["Supplement Hub",18.50,0,0,D+", 08:10","","First order only, code WELCOME"]]},
+ {id:"optimum-nutrition-creatine",c:"creatine",brand:"Optimum Nutrition",n:"Micronised Creatine Powder",pack:"634g",g:634,flav:"Unflavoured",serv:126,o:[["Boots",31.00,3.75,2,D+", 08:10","",""],["Sports Direct",29.99,4.99,2,D+", 06:30","",""],["Home Bargains",29.49,null,2,D+", 08:40","",""],["Predator Nutrition",31.00,3.95,2,D+", 08:10","",""],["Discount Supplements",33.49,3.49,2,D+", 06:30","","Free delivery over £30 (not met)"]]},
+ {id:"phd-creatine",c:"creatine",brand:"PhD",n:"Creatine Monohydrate",pack:"250g",g:250,flav:"Unflavoured",serv:50,o:[["Home Bargains",15.49,null,2,D+", 08:10","","Loyalty card price"],["Boots",14.49,3.75,2,D+", 07:45","","Loyalty card price"],["Tesco",13.79,null,0,D+", 06:30","",""],["Discount Supplements",13.79,0,2,D+", 07:15","","Subscribe & save price"],["Predator Nutrition",14.00,3.95,1,D+", 07:45","",""]]},
+ {id:"applied-nutrition-creatine",c:"creatine",brand:"Applied Nutrition",n:"Creatine Monohydrate",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Holland & Barrett",22.79,3.99,2,D+", 07:15","",""],["Tesco",18.49,null,2,D+", 08:40","","Loyalty card price"],["Home Bargains",20.00,null,1,D+", 06:30","","3 for 2 offer"],["Supplement Hub",19.49,0,2,D+", 07:15","",""],["Predator Nutrition",17.49,3.95,2,D+", 07:15","",""]]},
+ {id:"usn-creatine",c:"creatine",brand:"USN",n:"Creatine Monohydrate",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Home Bargains",25.99,null,2,D+", 07:15","","Loyalty card price"],["Holland & Barrett",21.50,3.99,2,D+", 08:10","",""],["Boots",21.49,3.75,2,D+", 07:15","","Loyalty card price"],["Supplement Hub",24.79,0,0,D+", 08:10","",""],["Predator Nutrition",24.49,3.95,2,D+", 08:10","",""]]},
+ {id:"reflex-creatine",c:"creatine",brand:"Reflex",n:"Creapure Creatine",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Holland & Barrett",30.50,3.99,2,D+", 09:02","","Loyalty card price"],["Tesco",28.00,null,1,D+", 08:10","",""],["Home Bargains",32.79,null,2,D+", 06:30","",""],["Supplement Hub",30.79,0,2,D+", 08:40","","Subscribe & save price"],["Discount Supplements",31.00,0,1,D+", 07:45","",""]]},
+ {id:"muscletech-creatine",c:"creatine",brand:"MuscleTech",n:"Platinum Creatine",pack:"400g",g:400,flav:"Unflavoured",serv:80,o:[["Sports Direct",24.79,4.99,2,D+", 09:02","","Loyalty card price"],["Holland & Barrett",21.00,3.99,2,D+", 09:02","",""],["Home Bargains",22.49,null,2,D+", 08:10","","3 for 2 offer"],["Discount Supplements",22.79,0,2,D+", 07:15","",""],["Supplement Hub",24.00,3.49,2,D+", 08:40","","Free delivery over £30 (not met)"]]},
+ {id:"the-protein-works-creatine",c:"creatine",brand:"The Protein Works",n:"Creatine Monohydrate",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Sports Direct",16.99,4.99,2,D+", 08:10","",""],["Home Bargains",16.99,null,2,D+", 08:40","","3 for 2 offer"],["Boots",17.50,3.75,1,D+", 06:30","","3 for 2 offer"],["Predator Nutrition",15.79,3.95,1,D+", 07:45","",""],["Supplement Hub",17.79,3.49,2,D+", 06:30","","Free delivery over £30 (not met)"]]},
+ {id:"per4m-creatine",c:"creatine",brand:"PER4M",n:"Creatine Monohydrate",pack:"300g",g:300,flav:"Unflavoured",serv:60,o:[["Boots",16.50,3.75,2,D+", 08:10","",""],["Holland & Barrett",14.00,3.99,1,D+", 06:30","","Loyalty card price"],["Tesco",18.99,null,2,D+", 07:15","",""],["Discount Supplements",15.50,0,2,D+", 07:15","","First order only, code WELCOME"],["Supplement Hub",16.00,0,2,D+", 09:02","","Subscribe & save price"]]},
+ {id:"warrior-creatine",c:"creatine",brand:"Warrior",n:"Creatine Monohydrate",pack:"300g",g:300,flav:"Unflavoured",serv:60,o:[["Boots",11.00,3.75,2,D+", 08:10","",""],["Sports Direct",11.79,4.99,2,D+", 07:15","","3 for 2 offer"],["Holland & Barrett",10.99,3.99,2,D+", 06:30","",""],["Predator Nutrition",10.49,3.95,2,D+", 08:40","",""],["Supplement Hub",10.50,0,2,D+", 07:15","",""]]},
+ {id:"efectiv-nutrition-creatine",c:"creatine",brand:"Efectiv Nutrition",n:"Creatine Monohydrate",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Sports Direct",20.99,4.99,2,D+", 07:15","",""],["Holland & Barrett",18.50,3.99,1,D+", 08:40","",""],["Home Bargains",18.79,null,2,D+", 07:15","","Loyalty card price"],["Supplement Hub",18.79,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"],["Discount Supplements",18.00,3.49,2,D+", 08:40","","Free delivery over £30 (not met)"]]},
+ {id:"holland--barrett-creatine",c:"creatine",brand:"Holland & Barrett",n:"Creatine Monohydrate",pack:"250g",g:250,flav:"Unflavoured",serv:50,o:[["Tesco",15.79,null,2,D+", 09:02","",""],["Home Bargains",16.50,null,2,D+", 09:02","",""],["Holland & Barrett",13.99,3.99,2,D+", 06:30","","Loyalty card price"],["Predator Nutrition",13.00,3.95,2,D+", 08:40","",""],["Discount Supplements",13.49,0,2,D+", 07:45","",""]]},
+ {id:"kinetica-creatine",c:"creatine",brand:"Kinetica",n:"Creatine Monohydrate",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Sports Direct",18.49,4.99,2,D+", 06:30","",""],["Holland & Barrett",17.79,3.99,1,D+", 08:10","",""],["Home Bargains",18.99,null,0,D+", 07:15","",""],["Predator Nutrition",21.49,3.95,2,D+", 09:02","",""],["Discount Supplements",16.50,0,1,D+", 06:30","",""]]},
+ {id:"mutant-creatine",c:"creatine",brand:"Mutant",n:"Creakong Creatine",pack:"300g",g:300,flav:"Unflavoured",serv:60,o:[["Boots",16.00,3.75,1,D+", 07:15","",""],["Sports Direct",19.49,4.99,2,D+", 07:15","",""],["Home Bargains",18.99,null,0,D+", 07:45","",""],["Discount Supplements",17.00,0,2,D+", 08:40","","First order only, code WELCOME"],["Supplement Hub",17.79,0,0,D+", 08:40","","First order only, code WELCOME"]]},
+ {id:"dymatize-creatine",c:"creatine",brand:"Dymatize",n:"Micronized Creatine",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Tesco",28.79,null,2,D+", 06:30","","Loyalty card price"],["Holland & Barrett",29.79,3.99,1,D+", 07:45","","Loyalty card price"],["Home Bargains",30.99,null,2,D+", 09:02","",""],["Discount Supplements",31.49,3.49,0,D+", 07:45","","Free delivery over £30 (not met)"],["Supplement Hub",31.49,0,2,D+", 07:45","",""]]},
+ {id:"rule-1-creatine",c:"creatine",brand:"Rule 1",n:"R1 Creatine",pack:"375g",g:375,flav:"Unflavoured",serv:75,o:[["Sports Direct",22.99,4.99,2,D+", 07:45","",""],["Boots",25.49,3.75,1,D+", 08:40","",""],["Tesco",22.79,null,1,D+", 08:10","",""],["Predator Nutrition",24.50,3.95,2,D+", 09:02","","First order only, code WELCOME"],["Discount Supplements",26.79,3.49,2,D+", 06:30","","Free delivery over £30 (not met)"]]},
+ {id:"ghost-creatine",c:"creatine",brand:"Ghost",n:"Creatine",pack:"300g",g:300,flav:"Unflavoured",serv:60,o:[["Tesco",21.79,null,2,D+", 06:30","","Loyalty card price"],["Boots",27.00,3.75,0,D+", 09:02","",""],["Sports Direct",25.99,4.99,1,D+", 06:30","",""],["Discount Supplements",26.79,3.49,2,D+", 07:15","","Free delivery over £30 (not met)"],["Predator Nutrition",25.00,3.95,2,D+", 08:40","",""]]},
+ {id:"bio-synergy-creatine",c:"creatine",brand:"Bio-Synergy",n:"Creatine Monohydrate",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Tesco",19.99,null,1,D+", 08:10","",""],["Sports Direct",18.49,4.99,2,D+", 07:15","","Loyalty card price"],["Holland & Barrett",21.00,3.99,2,D+", 07:15","",""],["Supplement Hub",18.50,0,1,D+", 08:10","",""],["Discount Supplements",19.50,0,2,D+", 09:02","",""]]},
+ {id:"nutricost-creatine",c:"creatine",brand:"Nutricost",n:"Creatine Monohydrate",pack:"500g",g:500,flav:"Unflavoured",serv:100,o:[["Sports Direct",17.49,4.99,1,D+", 09:02","","Loyalty card price"],["Holland & Barrett",17.49,3.99,0,D+", 07:15","",""],["Home Bargains",18.79,null,0,D+", 07:45","",""],["Discount Supplements",14.99,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"],["Supplement Hub",15.00,0,2,D+", 09:02","",""]]},
+ {id:"sis-electrolytes",c:"electrolytes",brand:"SiS",n:"GO Hydro Tablets",pack:"2 × 20 tablets",flav:"Mixed flavours",serv:40,o:[["Tesco",14.50,null,2,D+", 08:10","","Loyalty card price"],["Superdrug",13.00,3.99,1,D+", 08:40","","3 for 2 offer"],["Boots",16.79,3.75,2,D+", 07:15","",""],["Ocado",15.50,null,2,D+", 08:40","",""],["Wiggle",12.50,0,0,D+", 08:10","",""]]},
+ {id:"high5-electrolytes",c:"electrolytes",brand:"High5",n:"Zero Electrolyte Tablets",pack:"4 × 20 tablets",flav:"Mixed flavours",serv:80,o:[["Tesco",17.00,null,2,D+", 07:45","",""],["Holland & Barrett",20.79,3.99,1,D+", 06:30","","Loyalty card price"],["Sainsbury's",21.49,null,2,D+", 08:40","",""],["Ocado",17.99,null,2,D+", 09:02","","Subscribe & save price"],["Sportsshoes.com",21.99,3.49,1,D+", 09:02","","Free delivery over £30 (not met)"]]},
+ {id:"nuun-electrolytes",c:"electrolytes",brand:"Nuun",n:"Sport Hydration Tablets",pack:"4 × 10 tablets",flav:"Mixed flavours",serv:40,o:[["Tesco",25.50,null,2,D+", 07:45","","3 for 2 offer"],["Sainsbury's",22.00,null,2,D+", 06:30","",""],["Holland & Barrett",22.49,3.99,1,D+", 08:10","","Loyalty card price"],["Wiggle",23.79,3.49,2,D+", 08:40","","Free delivery over £30 (not met)"],["Sportsshoes.com",23.50,3.49,2,D+", 08:10","","Free delivery over £30 (not met)"]]},
+ {id:"precision-fuel--hydration-electrolytes",c:"electrolytes",brand:"Precision Fuel & Hydration",n:"PH 1000 Tablets",pack:"3 × 10 tablets",flav:"Mixed flavours",serv:30,o:[["Asda",16.00,null,2,D+", 07:15","",""],["Tesco",18.00,null,1,D+", 06:30","",""],["Sainsbury's",17.79,null,2,D+", 06:30","","3 for 2 offer"],["Wiggle",18.79,0,1,D+", 06:30","",""],["Ocado",15.99,null,2,D+", 07:15","",""]]},
+ {id:"dioralyte-electrolytes",c:"electrolytes",brand:"Dioralyte",n:"Rehydration Sachets",pack:"20 sachets",flav:"Mixed flavours",serv:20,o:[["Boots",8.49,3.75,2,D+", 07:15","",""],["Superdrug",8.99,3.99,1,D+", 08:10","","Loyalty card price"],["Sainsbury's",8.00,null,2,D+", 08:10","","Loyalty card price"],["Ocado",8.50,null,2,D+", 06:30","",""],["Wiggle",9.50,3.49,1,D+", 09:02","","Free delivery over £30 (not met)"]]},
+ {id:"liquid-i-v-electrolytes",c:"electrolytes",brand:"Liquid I.V.",n:"Hydration Multiplier",pack:"16 sticks",flav:"Mixed flavours",serv:16,o:[["Holland & Barrett",27.50,3.99,2,D+", 08:10","","Loyalty card price"],["Sainsbury's",29.50,null,2,D+", 07:15","",""],["Asda",26.49,null,2,D+", 07:45","","Loyalty card price"],["Sportsshoes.com",28.00,0,0,D+", 06:30","","First order only, code WELCOME"],["Wiggle",28.79,0,2,D+", 06:30","",""]]},
+ {id:"lmnt-electrolytes",c:"electrolytes",brand:"LMNT",n:"Electrolyte Drink Mix",pack:"30 sticks",flav:"Mixed flavours",serv:30,o:[["Asda",43.49,null,2,D+", 07:15","","Loyalty card price"],["Boots",42.99,3.75,2,D+", 08:10","","Loyalty card price"],["Superdrug",42.00,3.99,2,D+", 08:40","",""],["Sportsshoes.com",37.99,0,2,D+", 07:45","",""],["Wiggle",39.00,0,1,D+", 09:02","",""]]},
+ {id:"myprotein-electrolytes",c:"electrolytes",brand:"Myprotein",n:"Electrolyte Tablets",pack:"3 × 20 tablets",flav:"Mixed flavours",serv:60,o:[["Tesco",12.49,null,2,D+", 07:15","","Loyalty card price"],["Sainsbury's",14.49,null,2,D+", 08:40","",""],["Asda",13.00,null,2,D+", 06:30","",""],["Sportsshoes.com",12.49,3.49,2,D+", 06:30","","Free delivery over £30 (not met)"],["Ocado",14.00,null,2,D+", 09:02","",""]]},
+ {id:"bulk-electrolytes",c:"electrolytes",brand:"Bulk",n:"Electrolyte Tablets",pack:"4 × 20 tablets",flav:"Mixed flavours",serv:80,o:[["Superdrug",18.49,3.99,2,D+", 07:15","","Loyalty card price"],["Tesco",17.99,null,2,D+", 08:10","",""],["Asda",15.50,null,1,D+", 06:30","","Loyalty card price"],["Ocado",18.79,null,2,D+", 07:15","","First order only, code WELCOME"],["Wiggle",18.49,3.49,1,D+", 07:15","","Free delivery over £30 (not met)"]]},
+ {id:"applied-nutrition-electrolytes",c:"electrolytes",brand:"Applied Nutrition",n:"Body Fuel Electrolyte Powder",pack:"450g",flav:"Mixed flavours",serv:45,o:[["Holland & Barrett",15.79,3.99,2,D+", 07:15","","3 for 2 offer"],["Boots",18.99,3.75,2,D+", 08:40","","3 for 2 offer"],["Sainsbury's",15.50,null,2,D+", 07:15","","Loyalty card price"],["Sportsshoes.com",17.49,3.49,2,D+", 07:15","","Free delivery over £30 (not met)"],["Wiggle",18.00,3.49,0,D+", 09:02","","Free delivery over £30 (not met)"]]},
+ {id:"tailwind-electrolytes",c:"electrolytes",brand:"Tailwind",n:"Endurance Fuel",pack:"50 servings",flav:"Mixed flavours",serv:50,o:[["Tesco",39.00,null,2,D+", 08:40","","Loyalty card price"],["Asda",49.50,null,2,D+", 09:02","","Loyalty card price"],["Holland & Barrett",41.49,3.99,2,D+", 06:30","","Loyalty card price"],["Sportsshoes.com",47.00,3.49,2,D+", 07:15","","Free delivery over £30 (not met)"],["Ocado",48.79,null,0,D+", 06:30","",""]]},
+ {id:"holland--barrett-electrolytes",c:"electrolytes",brand:"Holland & Barrett",n:"Electrolyte Effervescent Tablets",pack:"3 × 20 tablets",flav:"Mixed flavours",serv:60,o:[["Holland & Barrett",12.99,3.99,2,D+", 08:10","",""],["Sainsbury's",11.00,null,2,D+", 08:10","","Loyalty card price"],["Boots",12.79,3.75,1,D+", 09:02","",""],["Ocado",11.49,null,2,D+", 08:10","",""],["Wiggle",13.50,0,2,D+", 09:02","",""]]},
+ {id:"boots-electrolytes",c:"electrolytes",brand:"Boots",n:"Rehydration Sachets",pack:"20 sachets",flav:"Mixed flavours",serv:20,o:[["Tesco",6.50,null,0,D+", 06:30","",""],["Holland & Barrett",6.79,3.99,2,D+", 07:15","",""],["Asda",5.99,null,1,D+", 06:30","","Loyalty card price"],["Sportsshoes.com",6.99,3.49,2,D+", 07:15","","Free delivery over £30 (not met)"],["Wiggle",5.79,0,1,D+", 07:15","",""]]},
+ {id:"torq-electrolytes",c:"electrolytes",brand:"TORQ",n:"Hydration Drink",pack:"500g",flav:"Mixed flavours",serv:33,o:[["Sainsbury's",16.50,null,2,D+", 06:30","",""],["Superdrug",14.79,3.99,2,D+", 07:45","",""],["Holland & Barrett",17.00,3.99,2,D+", 07:45","",""],["Sportsshoes.com",15.79,0,0,D+", 09:02","",""],["Wiggle",17.49,0,2,D+", 09:02","",""]]},
+ {id:"ultima-electrolytes",c:"electrolytes",brand:"Ultima",n:"Replenisher Electrolyte Mix",pack:"30 sticks",flav:"Mixed flavours",serv:30,o:[["Boots",20.99,3.75,2,D+", 08:40","",""],["Asda",19.79,null,2,D+", 08:10","","3 for 2 offer"],["Sainsbury's",24.49,null,2,D+", 09:02","","Loyalty card price"],["Ocado",19.50,null,2,D+", 07:45","","Subscribe & save price"],["Wiggle",19.99,0,2,D+", 08:10","",""]]},
+ {id:"ote-electrolytes",c:"electrolytes",brand:"OTE",n:"Hydro Tablets",pack:"4 × 20 tablets",flav:"Mixed flavours",serv:80,o:[["Sainsbury's",23.00,null,2,D+", 07:15","","Loyalty card price"],["Tesco",28.50,null,2,D+", 09:02","",""],["Superdrug",28.79,3.99,2,D+", 08:10","",""],["Sportsshoes.com",22.99,0,2,D+", 08:10","",""],["Ocado",27.79,null,2,D+", 07:15","",""]]},
+ {id:"veloforte-electrolytes",c:"electrolytes",brand:"Veloforte",n:"Electrolyte Drink Mix",pack:"12 sachets",flav:"Mixed flavours",serv:12,o:[["Tesco",15.50,null,1,D+", 07:15","","Loyalty card price"],["Sainsbury's",14.99,null,2,D+", 08:10","","Loyalty card price"],["Asda",15.50,null,2,D+", 08:10","","Loyalty card price"],["Sportsshoes.com",17.49,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"],["Ocado",14.49,null,1,D+", 08:10","","Subscribe & save price"]]},
+ {id:"gu-electrolytes",c:"electrolytes",brand:"GU",n:"Hydration Drink Tabs",pack:"4 × 12 tablets",flav:"Mixed flavours",serv:48,o:[["Sainsbury's",28.49,null,2,D+", 08:10","",""],["Holland & Barrett",25.99,3.99,0,D+", 08:40","","Loyalty card price"],["Asda",31.79,null,1,D+", 08:40","",""],["Wiggle",28.49,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"],["Sportsshoes.com",27.00,0,2,D+", 08:10","",""]]},
+ {id:"active-root-electrolytes",c:"electrolytes",brand:"Active Root",n:"Hydration Drink Mix",pack:"35 servings",flav:"Mixed flavours",serv:35,o:[["Holland & Barrett",20.00,3.99,2,D+", 07:45","",""],["Boots",22.50,3.75,1,D+", 06:30","",""],["Superdrug",21.49,3.99,2,D+", 08:10","","Loyalty card price"],["Sportsshoes.com",20.00,0,2,D+", 08:10","",""],["Ocado",21.50,null,2,D+", 07:15","",""]]},
+ {id:"styrkr-electrolytes",c:"electrolytes",brand:"Styrkr",n:"Hydration Tablets",pack:"3 × 10 tablets",flav:"Mixed flavours",serv:30,o:[["Asda",13.00,null,1,D+", 08:40","",""],["Tesco",15.50,null,2,D+", 06:30","",""],["Superdrug",15.50,3.99,0,D+", 08:40","",""],["Ocado",13.99,null,2,D+", 06:30","",""],["Sportsshoes.com",13.00,0,2,D+", 08:40","",""]]},
+ {id:"holland--barrett-vitamin-d3-25µg",c:"supplements",type:"Vitamin D",brand:"Holland & Barrett",n:"Vitamin D3 25µg",pack:"240 tablets",flav:"Vitamin D",serv:240,o:[["Superdrug",10.00,3.99,2,D+", 07:15","","Loyalty card price"],["Home Bargains",11.79,null,2,D+", 06:30","",""],["Boots",12.99,3.75,1,D+", 08:40","","Loyalty card price"],["Ocado",12.79,null,2,D+", 07:45","",""],["Simply Supplements",12.99,0,2,D+", 07:45","",""]]},
+ {id:"vitabiotics-ultra-vitamin-d-25µg",c:"supplements",type:"Vitamin D",brand:"Vitabiotics",n:"Ultra Vitamin D 25µg",pack:"96 tablets",flav:"Vitamin D",serv:96,o:[["Superdrug",7.50,3.99,2,D+", 07:15","","Loyalty card price"],["Holland & Barrett",8.49,3.99,2,D+", 07:15","","Loyalty card price"],["Tesco",6.50,null,2,D+", 08:40","",""],["Ocado",7.49,null,0,D+", 08:40","",""],["Simply Supplements",7.49,0,2,D+", 07:45","",""]]},
+ {id:"boots-vitamin-d-25µg",c:"supplements",type:"Vitamin D",brand:"Boots",n:"Vitamin D 25µg",pack:"90 tablets",flav:"Vitamin D",serv:90,o:[["Tesco",4.79,null,2,D+", 08:40","","Loyalty card price"],["Holland & Barrett",4.00,3.99,1,D+", 07:15","","3 for 2 offer"],["Sainsbury's",5.00,null,2,D+", 08:40","",""],["Simply Supplements",4.99,0,2,D+", 08:10","",""],["Ocado",5.49,null,2,D+", 07:45","",""]]},
+ {id:"solgar-vitamin-d3-25µg",c:"supplements",type:"Vitamin D",brand:"Solgar",n:"Vitamin D3 25µg",pack:"100 softgels",flav:"Vitamin D",serv:100,o:[["Superdrug",9.00,3.99,1,D+", 09:02","",""],["Boots",7.00,3.75,2,D+", 06:30","",""],["Asda",7.79,null,2,D+", 06:30","","Loyalty card price"],["Simply Supplements",9.99,0,2,D+", 06:30","",""],["Ocado",8.00,null,2,D+", 08:10","",""]]},
+ {id:"seven-seas-omega-3-fish-oil",c:"supplements",type:"Omega-3",brand:"Seven Seas",n:"Omega-3 Fish Oil",pack:"120 capsules",flav:"Omega-3",serv:120,o:[["Boots",11.49,3.75,2,D+", 06:30","","Loyalty card price"],["Superdrug",13.49,3.99,1,D+", 09:02","","Loyalty card price"],["Sainsbury's",11.79,null,0,D+", 08:40","",""],["Ocado",12.99,null,2,D+", 09:02","",""],["Simply Supplements",12.00,3.49,1,D+", 08:10","","Free delivery over £30 (not met)"]]},
+ {id:"myprotein-omega-3",c:"supplements",type:"Omega-3",brand:"Myprotein",n:"Omega-3",pack:"250 softgels",flav:"Omega-3",serv:125,o:[["Sainsbury's",13.49,null,2,D+", 08:10","",""],["Tesco",15.50,null,0,D+", 07:15","","Loyalty card price"],["Superdrug",13.49,3.99,2,D+", 09:02","",""],["Ocado",14.49,null,0,D+", 09:02","",""],["Simply Supplements",13.99,3.49,2,D+", 09:02","","Free delivery over £30 (not met)"]]},
+ {id:"bulk-omega-3-fish-oil-1000mg",c:"supplements",type:"Omega-3",brand:"Bulk",n:"Omega-3 Fish Oil 1000mg",pack:"180 softgels",flav:"Omega-3",serv:90,o:[["Asda",12.99,null,2,D+", 06:30","",""],["Superdrug",12.99,3.99,1,D+", 09:02","",""],["Sainsbury's",12.00,null,1,D+", 06:30","",""],["Simply Supplements",10.79,0,2,D+", 08:40","",""],["Ocado",12.49,null,2,D+", 06:30","",""]]},
+ {id:"holland--barrett-omega-3-fish-oil-1000mg",c:"supplements",type:"Omega-3",brand:"Holland & Barrett",n:"Omega-3 Fish Oil 1000mg",pack:"240 capsules",flav:"Omega-3",serv:240,o:[["Tesco",14.00,null,2,D+", 08:40","",""],["Boots",14.49,3.75,1,D+", 08:40","","Loyalty card price"],["Sainsbury's",15.79,null,2,D+", 07:45","","Loyalty card price"],["Ocado",18.50,null,1,D+", 08:40","",""],["Simply Supplements",15.00,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"]]},
+ {id:"centrum-advance-multivitamin",c:"supplements",type:"Multivitamin",brand:"Centrum",n:"Advance Multivitamin",pack:"100 tablets",flav:"Multivitamin",serv:100,o:[["Home Bargains",17.50,null,2,D+", 08:10","","Loyalty card price"],["Holland & Barrett",14.50,3.99,2,D+", 07:15","",""],["Tesco",18.79,null,2,D+", 06:30","","Loyalty card price"],["Ocado",14.79,null,2,D+", 07:45","","First order only, code WELCOME"],["Simply Supplements",15.49,3.49,1,D+", 07:45","","Free delivery over £30 (not met)"]]},
+ {id:"vitabiotics-wellman-original",c:"supplements",type:"Multivitamin",brand:"Vitabiotics",n:"Wellman Original",pack:"30 tablets",flav:"Multivitamin",serv:30,o:[["Sainsbury's",10.99,null,2,D+", 08:40","","Loyalty card price"],["Tesco",10.49,null,0,D+", 09:02","",""],["Asda",11.50,null,2,D+", 07:15","",""],["Ocado",12.00,null,2,D+", 09:02","",""],["Simply Supplements",10.79,3.49,2,D+", 09:02","","Free delivery over £30 (not met)"]]},
+ {id:"myprotein-alpha-men-multivitamin",c:"supplements",type:"Multivitamin",brand:"Myprotein",n:"Alpha Men Multivitamin",pack:"120 tablets",flav:"Multivitamin",serv:40,o:[["Asda",14.99,null,2,D+", 08:40","",""],["Holland & Barrett",15.00,3.99,2,D+", 06:30","","3 for 2 offer"],["Home Bargains",14.49,null,1,D+", 07:15","",""],["Ocado",18.79,null,2,D+", 06:30","",""],["Simply Supplements",16.00,0,2,D+", 07:45","","First order only, code WELCOME"]]},
+ {id:"holland--barrett-abc-to-zinc",c:"supplements",type:"Multivitamin",brand:"Holland & Barrett",n:"ABC to Zinc",pack:"240 tablets",flav:"Multivitamin",serv:240,o:[["Sainsbury's",14.49,null,1,D+", 08:10","",""],["Asda",17.99,null,2,D+", 07:15","","Loyalty card price"],["Boots",16.49,3.75,1,D+", 06:30","",""],["Ocado",15.79,null,2,D+", 08:40","",""],["Simply Supplements",15.99,3.49,2,D+", 08:40","","Free delivery over £30 (not met)"]]},
+ {id:"bulk-magnesium-citrate",c:"supplements",type:"Magnesium",brand:"Bulk",n:"Magnesium Citrate",pack:"90 capsules",flav:"Magnesium",serv:30,o:[["Asda",9.99,null,2,D+", 06:30","","3 for 2 offer"],["Superdrug",7.49,3.99,2,D+", 09:02","",""],["Holland & Barrett",8.50,3.99,2,D+", 08:10","",""],["Ocado",8.00,null,0,D+", 07:45","",""],["Simply Supplements",8.49,0,0,D+", 08:10","",""]]},
+ {id:"betteryou-magnesium-oil-spray",c:"supplements",type:"Magnesium",brand:"BetterYou",n:"Magnesium Oil Spray",pack:"100ml",flav:"Magnesium",serv:67,o:[["Boots",12.50,3.75,1,D+", 07:15","","3 for 2 offer"],["Holland & Barrett",13.99,3.99,1,D+", 07:15","","Loyalty card price"],["Asda",12.79,null,2,D+", 09:02","",""],["Simply Supplements",13.50,0,1,D+", 06:30","","First order only, code WELCOME"],["Ocado",14.79,null,2,D+", 07:45","","First order only, code WELCOME"]]},
+ {id:"applied-nutrition-magnesium-glycinate",c:"supplements",type:"Magnesium",brand:"Applied Nutrition",n:"Magnesium Glycinate",pack:"120 capsules",flav:"Magnesium",serv:60,o:[["Sainsbury's",17.79,null,2,D+", 07:15","","Loyalty card price"],["Holland & Barrett",16.79,3.99,1,D+", 07:15","","Loyalty card price"],["Boots",17.99,3.75,2,D+", 07:15","",""],["Simply Supplements",15.49,0,0,D+", 08:40","",""],["Ocado",16.49,null,2,D+", 07:15","",""]]},
+ {id:"solgar-magnesium-citrate",c:"supplements",type:"Magnesium",brand:"Solgar",n:"Magnesium Citrate",pack:"60 tablets",flav:"Magnesium",serv:30,o:[["Holland & Barrett",12.79,3.99,1,D+", 06:30","",""],["Superdrug",15.50,3.99,2,D+", 06:30","","3 for 2 offer"],["Sainsbury's",16.00,null,2,D+", 08:40","",""],["Ocado",13.50,null,2,D+", 06:30","",""],["Simply Supplements",14.50,0,1,D+", 09:02","",""]]},
+ {id:"applied-nutrition-abe-pre-workout",c:"supplements",type:"Pre-workout",brand:"Applied Nutrition",n:"ABE Pre-Workout",pack:"315g",flav:"Pre-workout",serv:30,o:[["Superdrug",30.99,3.99,1,D+", 08:40","","3 for 2 offer"],["Holland & Barrett",28.99,3.99,2,D+", 08:40","","Loyalty card price"],["Tesco",23.00,null,2,D+", 08:40","","3 for 2 offer"],["Simply Supplements",24.49,0,2,D+", 09:02","",""],["Ocado",25.99,null,2,D+", 06:30","",""]]},
+ {id:"grenade-50-calibre-pre-workout",c:"supplements",type:"Pre-workout",brand:"Grenade",n:".50 Calibre Pre-Workout",pack:"232g",flav:"Pre-workout",serv:20,o:[["Asda",31.50,null,2,D+", 08:40","","Loyalty card price"],["Tesco",32.00,null,1,D+", 08:40","",""],["Boots",30.79,3.75,2,D+", 06:30","","3 for 2 offer"],["Simply Supplements",29.49,3.49,1,D+", 09:02","","Free delivery over £30 (not met)"],["Ocado",29.50,null,1,D+", 07:15","",""]]},
+ {id:"myprotein-the-pre-workout",c:"supplements",type:"Pre-workout",brand:"Myprotein",n:"THE Pre-Workout",pack:"600g",flav:"Pre-workout",serv:30,o:[["Holland & Barrett",38.99,3.99,2,D+", 08:10","",""],["Sainsbury's",33.79,null,2,D+", 07:45","",""],["Superdrug",37.49,3.99,2,D+", 07:45","","Loyalty card price"],["Simply Supplements",32.49,0,2,D+", 08:40","",""],["Ocado",35.50,null,2,D+", 08:10","",""]]},
+ {id:"ghost-legend-pre-workout",c:"supplements",type:"Pre-workout",brand:"Ghost",n:"Legend Pre-Workout",pack:"252g",flav:"Pre-workout",serv:25,o:[["Boots",40.00,3.75,2,D+", 07:15","","Loyalty card price"],["Holland & Barrett",36.79,3.99,2,D+", 09:02","","Loyalty card price"],["Tesco",44.50,null,1,D+", 07:45","","3 for 2 offer"],["Simply Supplements",38.79,3.49,2,D+", 07:45","","Free delivery over £30 (not met)"],["Ocado",43.00,null,1,D+", 06:30","","Subscribe & save price"]]},
+];
+const STOCK=["Out of stock","Low stock","In stock"];
+/* SELLERS: real UK high street and online shops we compare. Prices against them are SAMPLES until checked. */
+const SELLERS={"Holland & Barrett":"High street","Boots":"High street","Superdrug":"High street","Tesco":"High street","Sainsbury's":"High street","Asda":"High street","Sports Direct":"High street","Home Bargains":"High street",
+ "Discount Supplements":"Online","Predator Nutrition":"Online","Supplement Hub":"Online","Ocado":"Online","Wiggle":"Online","Sportsshoes.com":"Online","Simply Supplements":"Online","Amazon":"Online"};
+const sellerType=o=>o.official?"Online":(SELLERS[o.r]||"Online");
+let shopType="All";
+/* AMAZON: Amazon's rules only allow prices that come from its Product Advertising/Creators API or an Amazon-served link.
+   Never type Amazon prices in by hand. Until the API is connected, each product shows an Amazon row with a
+   "Check price on Amazon" button. Put your Associates link for each product in amzUrl below (by product id).
+   Once API prices are flowing, add Amazon to that product's offers like any other retailer and the row ranks normally. */
+const AMZ_LINKS={ /* "myprotein-impact": "https://www.amazon.co.uk/dp/ASIN?tag=YOURTAG-21", */ };
+/* OFFICIAL BRAND SITES: price when bought direct from the brand's own website. Edit OFFICIAL by product id:
+   [price £, delivery £ (null = unknown), stock, last updated, tracked link, note]. Sample values are generated below until you add real ones. */
+const OFFICIAL={};
+function sampleOfficial(p){
+  let h=0;for(const c of p.id)h=(h*33+c.charCodeAt(0))%9973;
+  const base=Math.min(...p.o.map(o=>o[1])), f=1.02+(h%14)/100, pr=Math.floor(base*f)+.99;
+  const del=h%3===0?3.99:h%3===1?0:null;
+  return [pr,del,h%11===0?1:2,D+", 08:00","",h%4===0?"Price before discount codes":""];
+}
+P.forEach(p=>{
+  if(p.brand){const [pr,del,st,upd,url,note]=OFFICIAL[p.id]||sampleOfficial(p);p.o.push([`${p.brand} official site`,pr,del,st,upd,url,note,true]);}
+  p.o=p.o.map(([r,pr,del,stock,upd,url,note,official])=>({r,pr,del,stock,upd,url,note,official:!!official,t:pr+(del??0)}))
+    .sort((a,b)=>(b.stock>0)-(a.stock>0)||a.t-b.t);
+  const live=p.o.filter(o=>o.stock>0); p.best=live[0]||p.o[0];
+  p.low=p.best.t; p.high=Math.max(...live.map(o=>o.t)); p.ps=p.low/p.serv; p.save=p.high-p.low;
+  p.off=p.o.find(o=>o.official); p.amzUrl=AMZ_LINKS[p.id]||""; p.amzLive=p.o.some(o=>o.r==="Amazon");
+  p.upd=p.best.upd; p.title=`${p.brand?p.brand+" ":""}${p.n} ${p.pack}`; if(p.g){p.p100=p.low/(p.g/100);p.hi100=p.high/(p.g/100);}
+});
+const GUIDES=[
+ {id:"guide-protein",c:"protein",t:"How much protein do you actually need?",d:"A simple daily target based on your body weight and goal, and how many scoops that really means.",m:"4 min read",
+  b:`<p>Most active adults building or keeping muscle do well on about <strong>1.6g of protein per kg of body weight per day</strong>. Research on resistance training puts the useful range at roughly 1.4 to 2.0g/kg. For a 75kg person, that is about 120g a day.</p>
+  <h2>Food first, powder second</h2><p>Protein powder is a convenient way to fill the gap, not a requirement. If meals already get you close to your target, one scoop a day is usually plenty.</p>
+  <h2>Spread it out</h2><p>Splitting intake across 3 to 5 meals of 20 to 40g each tends to work better than one large serving.</p>
+  <h2>How to compare prices</h2><p>Tubs list different scoop sizes and protein percentages. That is why we rank protein by <strong>price per 100g</strong>, using the delivered price. It is a fair way to compare a 480g tub with a 1kg bag.</p>`},
+ {id:"guide-creatine",c:"creatine",t:"Creatine monohydrate vs other forms",d:"Why plain monohydrate is the best-studied and cheapest option, and when capsules make sense.",m:"3 min read",
+  b:`<p>Creatine monohydrate is the most researched sports supplement there is. A daily dose of <strong>3 to 5g</strong> raises muscle creatine stores within about 3 to 4 weeks, and supports strength and power in repeated high-intensity efforts.</p>
+  <h2>Do you need a loading phase?</h2><p>No. Loading (around 20g a day for 5 to 7 days) just gets you there faster. A steady 3 to 5g reaches the same point a little later.</p>
+  <h2>Fancy forms</h2><p>Buffered, HCl and ethyl ester versions cost more and have no stronger evidence than monohydrate. Creapure is monohydrate made to a specific purity standard.</p>
+  <h2>Powder or capsules?</h2><p>Powder is almost always cheaper per serving. Capsules suit people who travel or dislike the texture, but check how many capsules make one 5g dose.</p>`},
+ {id:"guide-electrolytes",c:"electrolytes",t:"Do you need electrolytes?",d:"When water is enough, and when sodium and potassium actually help.",m:"3 min read",
+  b:`<p>For most gym sessions under an hour, water is enough. Electrolytes become useful when you sweat heavily for longer: endurance sessions over 60 to 90 minutes, hot conditions, or back-to-back training.</p>
+  <h2>Sodium is the main one</h2><p>Sweat is mostly water and sodium. Heavy sweaters can lose a lot of sodium per hour, so check the sodium content per serving, not just the flavour.</p>
+  <h2>Watch the sugar</h2><p>Some mixes add carbohydrate for fuel during long efforts. If you only want hydration, choose a zero-sugar option.</p>
+  <p class="small">If you have high blood pressure or kidney problems, speak to your GP before using high-sodium products.</p>`},
+ {id:"guide-cost-per-serving",c:null,t:"How to read cost per serving",d:"The one number that stops big tubs and flash sales from fooling you.",m:"2 min read",
+  b:`<p>A bigger tub often looks like better value, and a sale banner looks like a bargain. Neither tells you what each dose costs.</p>
+  <h2>The formula</h2><p><strong>Total price including delivery ÷ number of servings = cost per serving.</strong> For protein we go one step further and divide by grams of protein, then show the price per 25g.</p>
+  <h2>Delivery counts</h2><p>A £3.99 delivery charge on a small order can wipe out a lower shelf price. Every total on Scansupp includes standard UK delivery.</p>
+  <h2>Check the serving size</h2><p>Two creatine tubs of the same weight can list different serving sizes. We standardise to the dose on the label and flag anything unusual.</p>`}
+];
+const GBP=v=>"£"+v.toFixed(2);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const perLine=p=>p.g?`${GBP(p.p100)} per 100g · ${GBP(p.ps)} / serving`:`${GBP(p.ps)} / serving`;
+const SAMPLE=`<p class="note">Sample prices for layout. Shops and brands are real, but these prices have not been checked. Replace them with verified prices before launch.</p>`;
+const AD=`<p class="ad"><b>Advertisement:</b> We earn commission from qualifying purchases through these links. Ranked by lowest delivered price among the retailers we compare.</p>`;
+
+const delTxt=o=>o.del==null?"Check at checkout":o.del?GBP(o.del):"Free";
+const amzLink=(p,cls="visit")=>p.amzUrl?`<a class="${cls}" href="${esc(p.amzUrl)}" target="_blank" rel="sponsored nofollow noopener">Check price on Amazon</a>`:`<span class="pending" title="Add your Amazon Associates link for this product">Amazon link pending</span>`;
+const buyLink=(o,cls="visit")=>o.url?`<a class="${cls}" href="${esc(o.url)}" target="_blank" rel="sponsored nofollow noopener">Buy at ${o.r}</a>`:`<span class="pending" title="Add the tracked affiliate link once ${o.r} approves you">Link pending</span>`;
+/* Product photos: set p.img to the official image URL from the retailer's Awin feed and it appears next to the brand. No image is shown until then. */
+function thumb(p,size=40){
+  return p.img?`<img class="thumb" src="${esc(p.img)}" alt="${esc(p.title)}" width="${size}" height="${size}" loading="lazy">`:"";
+}
+function view(p){ /* best and highest in-stock offer for the current shop filter */
+  const live=p.o.filter(o=>o.stock>0&&(shopType==="All"||sellerType(o)===shopType));
+  if(!live.length) return null;
+  const best=live[0], high=Math.max(...live.map(o=>o.t));
+  return {best,high,save:high-best.t,m:p.g?best.t/(p.g/100):best.t/p.serv,n:live.length};
+}
+const metric=p=>p.g?p.p100:p.ps;
+const UNIT={protein:"100g",creatine:"100g",electrolytes:"serving",supplements:"daily dose"};
+const UNITLBL={protein:"Per 100g",creatine:"Per 100g",electrolytes:"Per serving",supplements:"Per daily dose"};
+let suppType="All";
+function top3(k){
+  return P.filter(p=>p.c===k).map(p=>({p,o:p.best})).filter(d=>d.o.stock>0).sort((a,b)=>metric(a.p)-metric(b.p)).slice(0,3);
+}
+function dealsBlock(k,compact){
+  const d=top3(k);
+  return `<div class="deals${compact?" compact":""}">
+    ${compact?`<div class="deals-head"><a href="#${k}">${CATS[k].t}</a><span>Top 3 deals</span></div>`:""}
+    <ol>${d.map((x,i)=>`<li>
+      <span class="rank">${["i","ii","iii"][i]}</span>
+      <div class="d-main with-thumb">${thumb(x.p,44)}<div><a class="d-name" href="#${x.p.id}">${x.p.title}</a><div class="d-where">Where to buy: <b>${x.o.r}</b>${x.o.note?` · <span class="cond-in">${x.o.note}</span>`:""}</div></div></div>
+      <dl class="d-figs"><div><dt>Price</dt><dd>${GBP(x.o.pr)}</dd></div><div><dt>Delivery</dt><dd>${delTxt(x.o)}</dd></div><div><dt>Total</dt><dd class="d-tot">${GBP(x.o.t)}${x.o.del==null?"<small> + del.</small>":""}</dd></div><div><dt>${UNITLBL[k]}</dt><dd>${GBP(metric(x.p))}</dd></div></dl>
+      <div class="d-buy">${buyLink(x.o)}</div></li>`).join("")}</ol></div>`;
+}
+function card(p){
+  const top=p.o.filter(o=>o.stock>0).slice(0,3);
+  return `<a class="card" href="#${p.id}">
+    <div class="with-thumb">${thumb(p,64)}<div><div class="tag">${CATS[p.c].t}</div><h3>${p.title}</h3><div class="spec">${p.flav} · ${p.serv} servings</div></div></div>
+    <div class="price"><div><div class="big">${GBP(p.low)}</div><div class="per">${perLine(p)}</div></div>${p.save>.005?`<span class="save">Save ${GBP(p.save)}</span>`:""}</div>
+    <table class="mini"><thead><tr><th>Where to buy</th><th class="n">Delivery</th><th class="n">Total</th></tr></thead><tbody>
+      ${top.map((o,i)=>`<tr${i?"":` class="first"`}><td>${o.r}</td><td class="n">${delTxt(o).replace("Check at checkout","Not known")}</td><td class="n">${GBP(o.t)}</td></tr>`).join("")}
+    </tbody></table>
+    <div class="from"><span>${p.o.length} retailers compared</span><span>Full comparison →</span></div></a>`;
+}
+function guideCard(g){return `<a class="guide" href="#${g.id}"><div class="eyebrow">${g.c?CATS[g.c].t:"Money"}</div><h3>${g.t}</h3><p>${g.d}</p><span>${g.m}</span></a>`;}
+let sortBy="serv", query="";
+function sorted(list){return [...list].sort((a,b)=>sortBy==="price"?a.low-b.low:sortBy==="save"?b.save-a.save:metric(a)-metric(b));}
+function toolbar(n){return `<div class="toolbar"><span id="cnt">${n} products</span><label>Sort <select id="sortBy">
+  <option value="serv"${sortBy==="serv"?" selected":""}>Lowest per serving</option>
+  <option value="price"${sortBy==="price"?" selected":""}>Lowest price</option>
+  <option value="save"${sortBy==="save"?" selected":""}>Biggest saving</option></select></label></div>`;}
+
+const V={
+ home(){
+  const best=Object.keys(CATS).map(k=>{const l=P.filter(p=>p.c===k);const m=Math.min(...l.map(metric));return {k,n:l.length,m,u:UNIT[k]}});
+  return `<div class="wrap"><section class="hero">
+    <div><h1>The same tub, <em>for less.</em></h1>
+    <p>We compare the exact same tub across UK retailers, with delivery, stock and the time we last checked, so you know the real cheapest price.</p>
+    <form class="search" id="searchForm" role="search"><input id="q" type="search" placeholder="Search whey, creatine, electrolytes…" aria-label="Search products" value="${esc(query)}"><button type="submit">Compare</button></form></div>
+    <aside class="receipt" aria-label="Example saving"><h3>Example · ${P[0].title}</h3>
+      ${[...P[0].o].reverse().map(o=>`<div class="row"><span>${o.r}</span><span>${GBP(o.t)}</span></div>`).join("")}
+      <div class="tot"><span>You save</span><span>${GBP(P[0].save)}</span></div></aside></section>
+  <section class="section" style="padding-top:0"><h2 class="sh">Shop by category</h2><p class="sub">Lowest cost per serving we've found in each.</p>
+    <div class="cats">${best.map(b=>`<a class="tile" href="#${b.k}"><strong>${CATS[b.k].t}</strong><span>${b.n} high street brands ranked daily</span><em>from ${GBP(b.m)} / ${b.u}</em></a>`).join("")}</div></section>
+  <section class="section" id="results"><h2 class="sh">Three cheapest deals in every category</h2><p class="sub">The lowest delivered prices among the retailers we compare, with where to buy each one.</p>
+    ${AD}${SAMPLE}<div style="height:24px"></div><div class="deal-grid">${Object.keys(CATS).map(k=>dealsBlock(k,true)).join("")}</div></section></div>
+  <section class="how"><div class="wrap">
+    <div><div class="num">i.</div><h3>Pick a product</h3><p>Search or browse by category. Each comparison is one brand, size and flavour.</p></div>
+    <div><div class="num">ii.</div><h3>Compare per serving</h3><p>Prices include delivery where known, with stock status and when we last checked.</p></div>
+    <div><div class="num">iii.</div><h3>Buy where it's cheapest</h3><p>Our tracked link takes you straight to that exact product at the retailer.</p></div></div></section>
+  <div class="wrap"><section class="section"><h2 class="sh">Buying guides</h2><p class="sub">Straight answers before you spend.</p>
+    <div class="guides">${GUIDES.slice(0,3).map(guideCard).join("")}</div><p style="margin-top:18px"><a href="#guides">All guides →</a></p></section></div>`;
+ },
+ rank(k){
+  const types=k==="supplements"?["All",...new Set(P.filter(p=>p.c===k).map(p=>p.type))]:null;
+  const all=P.filter(p=>p.c===k&&p.best.stock>0);
+  const list=all.filter(p=>(!types||suppType==="All"||p.type===suppType)&&view(p)).map(p=>({p,v:view(p)})).sort((a,b)=>a.v.m-b.v.m);
+  const avg=list.reduce((s,x)=>s+x.v.m,0)/(list.length||1);
+  const head={protein:"Best protein deals per 100g",creatine:"Best creatine deals per 100g",electrolytes:"Best electrolyte deals per serving",supplements:"Best supplement deals per daily dose"}[k];
+  return `<section class="topdeals"><div class="eyebrow">Today's ranking · ${D}</div><h2 class="sh">${head}</h2>
+  <p class="sub" style="margin:0 0 20px">${list.length} brands, cheapest ${UNITLBL[k].toLowerCase()} first. Average today: ${GBP(avg)} ${UNITLBL[k].toLowerCase()}.</p>
+  <div class="chips" role="group" aria-label="Where you shop">${["All","High street","Online"].map(t=>`<button class="chip shop" data-shop="${t}" aria-pressed="${t===shopType}">${t==="All"?"All shops":t==="Online"?"Online only":t}</button>`).join("")}</div>
+  ${types?`<div class="chips" role="group" aria-label="Supplement type">${types.map(t=>`<button class="chip" data-type="${t}" aria-pressed="${t===suppType}">${t}</button>`).join("")}</div>`:""}
+  ${AD}<div class="tablebox"><table class="rank-t">
+  <thead><tr><th>#</th><th>Brand</th><th>Where to buy</th><th class="n">Price</th><th class="n">Delivery</th><th class="n">${UNITLBL[k]}</th><th class="n">Cheaper by</th><th></th><th class="n">Official site</th><th class="n">Amazon</th></tr></thead>
+  <tbody>${list.map(({p,v},i)=>{const o=v.best,pct=Math.round((1-o.t/v.high)*100);return `<tr${i?"":` class="lead"`}>
+    <td class="rk">${i+1}</td>
+    <td><div class="with-thumb">${thumb(p,52)}<div><a class="r-brand" href="#${p.id}">${p.brand}</a><div class="small">${p.n} · ${p.pack}${p.type&&suppType==="All"?" · "+p.type:""}</div></div></div></td>
+    <td><b>${o.r}</b><div class="small">${sellerType(o)}</div>${o.official?`<span class="off-badge">Brand</span>`:""}${o.note?`<div class="cond">${o.note}</div>`:""}${o.stock===1?`<div class="cond">Low stock</div>`:""}</td>
+    <td class="n">${GBP(o.pr)}</td><td class="n">${delTxt(o).replace("Check at checkout","Not known")}</td>
+    <td class="n"><b class="p100">${GBP(v.m)}</b>${o.del==null?`<div class="small">+ delivery</div>`:""}</td>
+    <td class="n">${v.save>.005?`<span class="cheaper">${GBP(v.save)} <small>(${pct}%)</small></span><div class="small">vs other shops</div>`:`<span class="small">Only one shop${shopType==="All"?"":" of this type"}</span>`}</td>
+    <td class="n">${buyLink(o)}</td><td class="n off-cell">${p.off?`${o.official?`<span class="cheaper">Best price</span>`:`<b>${GBP(p.off.t)}</b>${p.off.del==null?`<small class="small"> + del.</small>`:""}<div class="small">${p.off.t>o.t?`${GBP(p.off.t-o.t)} more`:"same or less"}</div>`}`:`<span class="small">—</span>`}</td><td class="n amz-cell">${amzLink(p)}</td></tr>`;}).join("")}</tbody></table></div>
+  <p class="small" style="margin-top:12px">"Cheaper by" compares the same product, size and flavour at the most expensive in-stock retailer we track. ${UNITLBL[k]} uses the delivered price where delivery is known.${k==="supplements"?" Daily dose follows the label; use the filters to compare like with like.":""}</p></section>`;
+ },
+ category(k){
+  const list=sorted(P.filter(p=>p.c===k)), g=GUIDES.filter(x=>x.c===k);
+  return `<div class="wrap"><div class="crumbs"><a href="#home">Home</a> / ${CATS[k].t}</div>
+  <div class="pagehead"><div class="eyebrow">Compare prices</div><h1>${CATS[k].t}</h1><p>${CATS[k].d}</p></div>
+  ${V.rank(k)}
+  ${SAMPLE}<div style="height:24px"></div><h2 class="sh" style="font-size:32px;margin:0 0 16px">All ${CATS[k].t.toLowerCase()}</h2>${toolbar(list.length)}<div class="grid">${list.map(card).join("")}</div>
+  ${g.length?`<section class="section"><h2 class="sh">Read before you buy</h2><div class="guides">${g.map(guideCard).join("")}</div></section>`:`<div style="height:40px"></div>`}</div>`;
+ },
+ product(p){
+  const related=P.filter(x=>x.c===p.c&&x!==p).slice(0,3), g=GUIDES.find(x=>x.c===p.c);
+  const buy=(o,cls)=>buyLink(o,cls);
+  return `<div class="wrap"><div class="crumbs"><a href="#home">Home</a> / <a href="#${p.c}">${CATS[p.c].t}</a> / ${p.title}</div>
+  <div class="pagehead with-thumb big-thumb">${thumb(p,120)}<div><div class="eyebrow">${CATS[p.c].t} · price comparison</div><h1>${p.title}</h1><p>${p.flav} · ${p.serv} servings${p.pro?` · ${p.pro}g protein per serving`:""}. Every offer below is the same product in the same pack size.</p></div></div>
+  <div class="prod"><aside class="summary">
+    <div class="small">Lowest price among the retailers we compare</div><div class="big">${GBP(p.low)}</div><div class="per">${perLine(p)}</div>
+    <dl><dt>Retailer</dt><dd>${p.best.r}</dd><dt>Delivery</dt><dd>${p.best.del==null?"Not known":p.best.del?GBP(p.best.del):"Free"}</dd><dt>Stock</dt><dd>${STOCK[p.best.stock]}</dd><dt>Highest in-stock price</dt><dd>${GBP(p.high)}</dd><dt>Difference</dt><dd style="color:var(--best);font-weight:700">${GBP(p.save)}</dd><dt>Price checked</dt><dd>${p.upd}</dd></dl>
+    ${p.best.url?`<a class="btn" href="${esc(p.best.url)}" target="_blank" rel="sponsored nofollow noopener">Visit ${p.best.r}</a>`:`<span class="btn ghost" aria-disabled="true">Tracked link pending</span>`}
+    ${g?`<a class="small" href="#${g.id}">Guide: ${g.t}</a>`:""}
+  </aside>
+  <div style="min-width:0">${AD}${SAMPLE}<div style="height:12px"></div><div class="tablebox"><table>
+    <thead><tr><th>Retailer</th><th>Pack size</th><th class="n">Price</th><th class="n">Delivery</th><th class="n">Total</th><th>Stock</th><th>Last updated</th><th></th></tr></thead>
+    <tbody>${p.o.map(o=>`<tr class="${o===p.best?"lead":""}${o.stock?"":" oos"}"><td>${o.r}${o.official?`<span class="off-badge">Brand</span>`:""}<div class="small">${o.official?"Brand website":sellerType(o)}</div>${o===p.best?`<span class="pill">Lowest</span>`:""}${o.note?`<div class="cond">${o.note}</div>`:""}</td>
+      <td>${p.pack}</td><td class="n">${GBP(o.pr)}</td><td class="n">${o.del==null?`<span class="small">Check at checkout</span>`:o.del?GBP(o.del):"Free"}</td>
+      <td class="n"><b>${GBP(o.t)}</b>${o.del==null?`<div class="small">+ delivery</div>`:""}</td>
+      <td><span class="stock s${o.stock}">${STOCK[o.stock]}</span></td><td class="small">${o.upd}</td><td class="n">${buy(o,"visit")}</td></tr>`).join("")}
+    ${p.amzLive?"":`<tr class="amz"><td>Amazon</td><td>${p.pack}</td><td class="n" colspan="3"><span class="small">Live price shown here once Amazon's API is connected</span></td><td><span class="small">See Amazon</span></td><td class="small">Live</td><td class="n">${amzLink(p)}</td></tr>`}</tbody></table></div>
+    <p class="small">Totals include delivery where we know it. Where delivery isn't known it is shown separately. Out-of-stock offers are listed but not ranked. Amazon prices can only be shown live from Amazon, so they are not ranked until that connection is in place. Conditions such as subscriptions or first-order codes are noted under the retailer. Check the final price on the retailer's site. <a href="#disclosure">How we compare and earn money</a>.</p></div></div>
+  ${related.length?`<section class="section" style="padding-top:0"><h2 class="sh">More ${CATS[p.c].t.toLowerCase()}</h2><div style="height:12px"></div><div class="grid">${related.map(card).join("")}</div></section>`:""}</div>`;
+ },
+ guides(){return `<div class="wrap"><div class="crumbs"><a href="#home">Home</a> / Buying guides</div>
+  <div class="pagehead"><div class="eyebrow">Learn</div><h1>Buying guides</h1><p>Short, evidence-based answers to the questions people ask before buying supplements.</p></div>
+  <div class="guides">${GUIDES.map(guideCard).join("")}</div><div style="height:48px"></div></div>`;},
+ guide(g){return `<div class="wrap narrow"><div class="crumbs"><a href="#home">Home</a> / <a href="#guides">Buying guides</a></div>
+  <article class="pagehead prose"><div class="eyebrow">${g.c?CATS[g.c].t:"Money"} · ${g.m}</div><h1>${g.t}</h1><p style="color:var(--muted);font-size:18px">${g.d}</p>${g.b}
+  ${g.c?`<p style="margin-top:28px"><a class="btn" href="#${g.c}">Compare ${CATS[g.c].t.toLowerCase()} prices</a></p>`:""}
+  <p class="small" style="margin-top:28px">General information only, not medical advice. Speak to your GP if you are pregnant, take medication or have a health condition.</p></article></div>`;},
+ about(){return page("About us","Who runs Scansupp",`
+  <p>Scansupp is an independent UK price comparison site for protein, creatine, electrolytes and everyday supplements.</p>
+  <h2>Why we built it</h2><p>Supplement prices swing constantly, tub sizes vary, and delivery charges hide in the basket. We wanted one place that answers a simple question: where is each serving cheapest today?</p>
+  <h2>How we rank</h2><p>We rank by total price including standard delivery, divided by servings. Retailers cannot pay to rank higher.</p>
+  <h2>Who we are</h2><p>Scansupp is run by Yonatan, a UK personal trainer and health, fitness and wellness coach with 18 years' experience working with individual clients and companies. The buying guides draw on that coaching work: what actually matters when you pick a supplement, and what you can skip.</p>`);},
+ contact(){return page("Contact","Get in touch",`
+  <p>Spotted a wrong price, want a product added, or run a retailer that would like to be listed? Send us a message.</p>
+  <p><strong>Email:</strong> <span style="user-select:all">hello@yourdomain.co.uk</span> <span class="small">(placeholder)</span></p>
+  <form class="contact" id="contactForm">
+    <label for="cName">Name<input id="cName" required autocomplete="name"></label>
+    <label for="cEmail">Email<input id="cEmail" type="email" required autocomplete="email"></label>
+    <label for="cTopic">Topic<select id="cTopic"><option>Wrong price</option><option>Add a product</option><option>Retailer partnership</option><option>Something else</option></select></label>
+    <label for="cMsg">Message<textarea id="cMsg" required></textarea></label>
+    <button class="btn" type="submit" style="justify-self:start">Send message</button>
+    <div id="cOk" hidden class="ok">Thanks. This form is a preview: connect it to an email or form service before launch so messages reach you.</div>
+  </form>`);},
+ disclosure(){return page("Affiliate disclosure","How Scansupp makes money",`
+  <p>Scansupp is free to use. When you click a retailer link and buy something, we may earn a commission from that retailer. You pay the same price either way.</p>
+  <p class="ad"><b>Advertisement:</b> We earn commission from qualifying purchases through retailer links on this site.</p>
+  <p><strong>As an Amazon Associate, Scansupp earns from qualifying purchases.</strong></p>
+  <h2>How we compare</h2><ul><li>Each comparison covers one product in one pack size and flavour. We never compare a 500g tub with a 250g tub.</li><li>"Lowest price" means the lowest delivered price among the retailers we compare, not the whole market.</li><li>Where we can't confirm delivery cost, we show it separately and say so.</li><li>Subscription prices, voucher codes and first-order discounts are labelled.</li><li>We compare high street shops, supermarkets, specialist online stores, Amazon and brands' own websites.</li><li>Every offer shows when we last checked it. Out-of-stock offers aren't ranked.</li><li>Amazon prices are only ever shown live from Amazon. We never copy them in by hand.</li><li>Where a brand sells direct, its official website is compared too, so you can see whether buying direct or from a shop is cheaper.</li></ul>
+  <h2>What commissions don't change</h2><ul><li>Rankings are always by lowest total cost per serving, including delivery.</li><li>Retailers cannot pay to appear higher or to be labelled "Best".</li><li>We list retailers we don't earn from when they have the lowest price.</li></ul>
+  <h2>Accuracy</h2><p>Prices are refreshed regularly but can change at any time. Always check the final price on the retailer's site before you buy.</p>`);},
+ privacy(){return page("Privacy policy","How we use your data",`
+  <p class="small">Last updated: 23 October 2026. [Template: have this reviewed for your setup before launch.]</p>
+  <h2>Who we are</h2><p>Scansupp ("we") is the data controller for personal data collected through this website, under UK GDPR and the Data Protection Act 2018.</p>
+  <h2>What we collect</h2><ul><li><strong>Contact form:</strong> your name, email and message, used only to reply to you.</li><li><strong>Analytics:</strong> anonymous usage data such as pages viewed, if you accept analytics cookies.</li><li><strong>Affiliate links:</strong> retailers may set cookies when you click through, to record a sale. Their own privacy policies apply.</li></ul>
+  <h2>Cookies</h2><p>Essential cookies keep the site working. Analytics and affiliate cookies are only set with your consent, which you can change at any time.</p>
+  <h2>How long we keep it</h2><p>Contact messages are deleted after 12 months unless we need them for an ongoing query.</p>
+  <h2>Your rights</h2><p>You can ask to access, correct or delete your data, or object to how we use it. Contact us via the <a href="#contact">contact page</a>. You can also complain to the Information Commissioner's Office (ico.org.uk).</p>`);}
+};
+function page(t,eb,body){return `<div class="wrap narrow"><div class="crumbs"><a href="#home">Home</a> / ${t}</div><article class="pagehead prose"><div class="eyebrow">${eb}</div><h1>${t}</h1>${body}</article><div style="height:32px"></div></div>`;}
+
+function searchView(){
+  const q=query.toLowerCase(), list=sorted(P.filter(p=>(p.title+" "+p.flav+" "+CATS[p.c].t).toLowerCase().includes(q)));
+  return `<div class="wrap"><div class="crumbs"><a href="#home">Home</a> / Search</div>
+  ${AD}<div class="pagehead"><h1>Results for “${esc(query)}”</h1></div>${toolbar(list.length)}
+  <div class="grid">${list.length?list.map(card).join(""):`<p>No products match. Try “whey”, “creatine” or browse <a href="#protein">protein</a>.</p>`}</div><div style="height:48px"></div></div>`;
+}
+
+let current="home";
+function route(){
+  const h=location.hash.slice(1)||"home", el=document.getElementById("view");
+  let html, nav=h;
+  if(h==="search") html=searchView();
+  else if(CATS[h]) html=V.category(h);
+  else if(P.find(p=>p.id===h)){const p=P.find(x=>x.id===h);html=V.product(p);nav=p.c;}
+  else if(GUIDES.find(g=>g.id===h)){html=V.guide(GUIDES.find(g=>g.id===h));nav="guides";}
+  else if(V[h]&&!["category","product","guide","rank"].includes(h)) html=V[h]();
+  else {html=V.home();nav="home";}
+  el.innerHTML=html; current=h;
+  document.querySelectorAll("nav.main a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+nav));
+  bind(); window.scrollTo(0,0);
+}
+function bind(){
+  const sf=document.getElementById("searchForm");
+  if(sf) sf.onsubmit=e=>{e.preventDefault();query=document.getElementById("q").value.trim();if(query){location.hash="search";if(current==="search")route();}};
+  const sb=document.getElementById("sortBy");
+  if(sb) sb.onchange=()=>{sortBy=sb.value;const y=scrollY;route();scrollTo(0,y);};
+  document.querySelectorAll(".chip.shop").forEach(c=>c.onclick=()=>{shopType=c.dataset.shop;const y=scrollY;route();scrollTo(0,y);});
+  document.querySelectorAll(".chip:not(.shop)").forEach(c=>c.onclick=()=>{suppType=c.dataset.type;const y=scrollY;route();scrollTo(0,y);});
+  const cf=document.getElementById("contactForm");
+  if(cf) cf.onsubmit=e=>{e.preventDefault();document.getElementById("cOk").hidden=false;};
+}
+window.addEventListener("hashchange",route);
+route();
+</script>
+</body>
+</html>
